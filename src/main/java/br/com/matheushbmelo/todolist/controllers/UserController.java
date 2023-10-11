@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import br.com.matheushbmelo.todolist.models.UserModel;
 import br.com.matheushbmelo.todolist.repositories.UserRepository;
 
@@ -26,6 +27,10 @@ public class UserController {
         if (user != null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Já existe um usuário com o mesmo username");
         }
+
+        var passwordEncripted = BCrypt.withDefaults().hashToString(12, userModel.getPassword().toCharArray());
+        userModel.setPassword(passwordEncripted);
+
         userRepository.save(userModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(userModel);
     }
