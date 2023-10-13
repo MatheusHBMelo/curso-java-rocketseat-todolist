@@ -17,14 +17,14 @@ public class UserController {
 
     private final UserRepository userRepository;
 
-    public UserController(UserRepository userRepository){
+    public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-    
+
     @PostMapping("")
-    public ResponseEntity<Object> createUser(@RequestBody UserModel userModel){
+    public ResponseEntity<Object> createUser(@RequestBody UserModel userModel) {
         var user = userRepository.findByUsername(userModel.getUsername());
-        if (user != null){
+        if (user != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Já existe um usuário com o mesmo username");
         }
 
